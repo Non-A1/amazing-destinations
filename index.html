@@ -3,13 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Ground Level | Travel Curation</title>
-    <!-- Tailwind CSS for clean, rapid styling -->
+    <title>The Ground Level | Top Destinations</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Custom dark-mode scrollbar and subtle cyber-noir aesthetics */
         body { background-color: #0b0f19; color: #f3f4f6; font-family: system-ui, -apple-system, sans-serif; }
         .accent-glow { text-shadow: 0 0 12px rgba(59, 130, 246, 0.5); }
+        
+        .trek-path {
+            stroke-dasharray: 6;
+            animation: dash 30s linear infinite;
+        }
+        @keyframes dash {
+            to { stroke-dashoffset: -20; }
+        }
+        #stickman {
+            transition: all 1.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
@@ -20,147 +29,246 @@
             <h1 class="text-xl font-mono tracking-widest text-blue-500 font-bold accent-glow">THE GROUND LEVEL</h1>
             <div id="intro-player-container" class="flex items-center space-x-3 bg-gray-900 px-4 py-2 rounded-lg border border-gray-800">
                 <span class="text-xs font-mono text-gray-400">GUIDE BRIEFING:</span>
-                <!-- Audio Element for Intro -->
                 <audio id="intro-audio" src="media/audio/intro.mp3" controls class="h-8 max-w-[200px] sm:max-w-xs invert opacity-80"></audio>
             </div>
         </div>
     </header>
 
     <!-- Main Content -->
-    <main class="max-w-6xl mx-auto px-6 py-12 flex-grow w-full">
+    <main class="max-w-6xl mx-auto px-6 py-12 flex-grow w-full space-y-12">
         
-        <!-- Hero Concept Section -->
-        <section class="text-center max-w-3xl mx-auto mb-16">
-            <h2 class="text-4xl sm:text-5xl font-black tracking-tight mb-4 text-white">Don't Just Visit. <span class="text-blue-500">Arrive.</span></h2>
-            <p class="text-gray-400 text-lg">Skip the tourist traps. Explore the world through the eyes of a guide who knows the terrain, the precise logistics, and the authentic local flavors.</p>
+        <!-- Hero Section -->
+        <section class="text-center max-w-3xl mx-auto">
+            <h2 class="text-4xl sm:text-5xl font-black tracking-tight mb-4 text-white">My Top <span class="text-blue-500">Destinations</span></h2>
+            <p class="text-gray-400 text-lg">Track the vectors from my base station in Irvine, California across my highest-rated global routes.</p>
         </section>
 
-        <!-- Destination Console Interface -->
+        <!-- Trekking Map Visualizer -->
+        <section class="bg-gray-950 border border-gray-800 rounded-2xl p-4 shadow-2xl relative">
+            <div class="absolute top-4 left-4 bg-gray-900/90 border border-gray-800 rounded-lg px-4 py-2 z-10 font-mono text-xs">
+                <span class="text-gray-500">DEPARTURE STATION:</span> <span class="text-blue-400 font-bold">Irvine, CA</span><br>
+                <span class="text-gray-500">RANGE TO TARGET:</span> <span id="distance-readout" class="text-emerald-400 font-bold">0 miles</span>
+            </div>
+            
+            <svg id="world-map" viewBox="0 0 1000 500" class="w-full h-auto bg-[#0d1321] rounded-xl border border-gray-900">
+                <!-- Base Grid Lines -->
+                <g stroke="#1e293b" stroke-width="0.5" stroke-dasharray="2 4">
+                    <line x1="0" y1="125" x2="1000" y2="125" /><line x1="0" y1="250" x2="1000" y2="250" />
+                    <line x1="0" y1="375" x2="1000" y2="375" /><line x1="250" y1="0" x2="250" y2="500" />
+                    <line x1="500" y1="0" x2="500" y2="500" /><line x1="750" y1="0" x2="750" y2="500" />
+                </g>
+
+                <!-- Map Shapes -->
+                <g fill="#1e293b" opacity="0.6">
+                    <path d="M100,80 L220,60 L260,140 L180,240 L120,200 Z" />
+                    <path d="M220,260 L280,300 L250,450 L200,320 Z" />
+                    <path d="M420,60 L750,40 L850,180 L650,250 L480,180 Z" />
+                    <path d="M450,200 L540,220 L560,380 L460,340 Z" />
+                    <path d="M780,320 L880,340 L840,420 L750,380 Z" />
+                </g>
+
+                <path id="flight-vector" d="" fill="none" stroke="#3b82f6" stroke-width="2" class="trek-path" opacity="0.4"/>
+                <circle cx="160" cy="155" r="5" fill="#3b82f6" class="animate-pulse" />
+                <circle id="target-pin" cx="160" cy="155" r="5" fill="#10b981" />
+
+                <!-- Backpack Stickman -->
+                <g id="stickman" transform="translate(160, 155)">
+                    <rect x="-10" y="-22" width="6" height="12" rx="2" fill="#ef4444" />
+                    <circle cx="0" cy="-25" r="4" fill="#ffffff" />
+                    <line x1="0" y1="-21" x2="0" y2="-10" stroke="#ffffff" stroke-width="2" />
+                    <line x1="-5" y1="-18" x2="5" y2="-18" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
+                    <line x1="0" y1="-10" x2="-4" y2="0" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
+                    <line x1="0" y1="-10" x2="4" y2="0" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
+                </g>
+            </svg>
+        </section>
+
+        <!-- Destination Console Layout Ordered by Priority -->
         <section class="grid grid-cols-1 lg:grid-cols-12 gap-8">
             
-            <!-- Sidebar Navigation Menu -->
-            <div class="lg:col-span-4 space-y-2">
-                <h3 class="text-xs font-mono text-gray-500 uppercase tracking-wider pl-2 mb-3">Select Target Hub</h3>
-                <button onclick="switchDest('seoul')" class="dest-btn w-full text-left px-4 py-3 rounded-xl border border-blue-500/30 bg-blue-950/20 text-blue-400 font-semibold transition-all">Seoul, South Korea</button>
-                <button onclick="switchDest('krabi')" class="dest-btn w-full text-left px-4 py-3 rounded-xl border border-gray-800 bg-gray-900/40 text-gray-400 hover:bg-gray-900 hover:text-gray-200 transition-all">Krabi, Thailand</button>
-                <button onclick="switchDest('germany')" class="dest-btn w-full text-left px-4 py-3 rounded-xl border border-gray-800 bg-gray-900/40 text-gray-400 hover:bg-gray-900 hover:text-gray-200 transition-all">Dusseldorf & Hamburg</button>
-                <button onclick="switchDest('netherlands')" class="dest-btn w-full text-left px-4 py-3 rounded-xl border border-gray-800 bg-gray-900/40 text-gray-400 hover:bg-gray-900 hover:text-gray-200 transition-all">Amsterdam & Haarlem</button>
-                <button onclick="switchDest('london')" class="dest-btn w-full text-left px-4 py-3 rounded-xl border border-gray-800 bg-gray-900/40 text-gray-400 hover:bg-gray-900 hover:text-gray-200 transition-all">London, England</button>
+            <!-- Ordered Left Sidebar -->
+            <div class="lg:col-span-4 space-y-4">
+                <div>
+                    <h3 class="text-xs font-mono text-gray-500 uppercase tracking-wider pl-2 mb-1">#1 THAILAND</h3>
+                    <div class="space-y-1">
+                        <button onclick="switchDest('bangkok')" class="dest-btn w-full text-left px-4 py-2 text-sm rounded-lg border border-gray-800 bg-gray-900/40 text-gray-400 hover:bg-gray-900 transition-all">Bangkok</button>
+                        <button onclick="switchDest('krabi')" class="dest-btn w-full text-left px-4 py-2 text-sm rounded-lg border border-gray-800 bg-gray-900/40 text-gray-400 hover:bg-gray-900 transition-all">Krabi</button>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-xs font-mono text-gray-500 uppercase tracking-wider pl-2 mb-1">#2 GERMANY</h3>
+                    <div class="space-y-1">
+                        <button onclick="switchDest('berlin')" class="dest-btn w-full text-left px-4 py-2 text-sm rounded-lg border border-gray-800 bg-gray-900/40 text-gray-400 hover:bg-gray-900 transition-all">Berlin</button>
+                        <button onclick="switchDest('dusseldorf')" class="dest-btn w-full text-left px-4 py-2 text-sm rounded-lg border border-gray-800 bg-gray-900/40 text-gray-400 hover:bg-gray-900 transition-all">Düsseldorf</button>
+                        <button onclick="switchDest('dortmund')" class="dest-btn w-full text-left px-4 py-2 text-sm rounded-lg border border-gray-800 bg-gray-900/40 text-gray-400 hover:bg-gray-900 transition-all">Dortmund</button>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-xs font-mono text-gray-500 uppercase tracking-wider pl-2 mb-1">#3 THE NETHERLANDS</h3>
+                    <div class="space-y-1">
+                        <button onclick="switchDest('amsterdam')" class="dest-btn w-full text-left px-4 py-2 text-sm rounded-lg border border-gray-800 bg-gray-900/40 text-gray-400 hover:bg-gray-900 transition-all">Amsterdam</button>
+                        <button onclick="switchDest('haarlem')" class="dest-btn w-full text-left px-4 py-2 text-sm rounded-lg border border-gray-800 bg-gray-900/40 text-gray-400 hover:bg-gray-900 transition-all">Haarlem</button>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-xs font-mono text-gray-500 uppercase tracking-wider pl-2 mb-1">#4 SOUTH KOREA</h3>
+                    <div class="space-y-1">
+                        <button onclick="switchDest('seoul')" class="dest-btn w-full text-left px-4 py-2 text-sm rounded-lg border border-gray-800 bg-gray-900/40 text-gray-400 hover:bg-gray-900 transition-all">Seoul</button>
+                    </div>
+                </div>
             </div>
 
-            <!-- Dynamic Display Dynamic Display Window -->
+            <!-- Interactive Media Dashboard Display Panel -->
             <div id="display-panel" class="lg:col-span-8 bg-gray-950 border border-gray-800 rounded-2xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
-                <!-- Data injected dynamically by JavaScript below -->
+                <!-- Content generated dynamically -->
             </div>
         </section>
     </main>
 
-    <!-- Footer -->
     <footer class="border-t border-gray-900 bg-gray-950/50 py-6 text-center text-xs font-mono text-gray-600">
-        &copy; 2026 THE GROUND LEVEL. DESIGNED FOR EXPEDITION.
+        &copy; 2026 THE GROUND LEVEL. GLOBAL PORTFOLIO ARCHIVE.
     </footer>
 
-    <!-- Frontend Logic & Destination Database Matrix -->
     <script>
+        // Structured Database Map
         const destinations = {
-            seoul: {
-                title: "Seoul, South Korea",
-                persona: "Hyper-Modern Urban Tech meets Timeless Tradition",
-                text: "Seoul is a masterclass in contrast—a city operating in the future while fiercely guarding its past. Walk down one alley and you’re surrounded by cyberpunk neon, flawless digital infrastructure, and cutting-edge tech; turn a corner, and you’re standing before the quiet majesty of a centuries-old palace. I’ll show you how to effortlessly command this massive metropolis, seamlessly transitioning from hyper-efficient transit networks to hidden, late-night street food stalls.",
-                mediaType: "video",
-                mediaSrc: "media/video/seoul.mp4",
-                poster: "media/photos/seoul-poster.jpg",
-                audioSrc: "media/audio/seoul-ambience.mp3",
-                vibe: "High-Octane Urbanism / Tech-Forward"
+            bangkok: {
+                title: "Bangkok, Thailand",
+                text: "The high-velocity heart of Southeast Asia. Bangkok challenges your senses with its complex maze of street food networks, ancient golden temple architecture, and chaotic modern energy.",
+                mapX: 760, mapY: 230, distance: "8,255 miles",
+                photos: ["media/photos/bangkok1.jpg", "media/photos/bangkok2.jpg", "media/photos/bangkok3.jpg"],
+                audio: "media/audio/bangkok-intro.mp3"
             },
             krabi: {
                 title: "Krabi, Thailand",
-                persona: "Rugged Adventure meets Deep Coastal Immersion",
-                text: "Forget the sanitized resort packages. Krabi is a high-intensity paradise where massive limestone cliffs plunge directly into the Andaman Sea, demanding exploration. As your guide, I bypass the typical tourist bottlenecks to get you on the ground where the real magic happens—whether that's navigating the logistics of a traditional longtail boat to hidden lagoons, taking on rugged coastal terrain, or tracking down the absolute best, fire-spiced Pad Krapow at a night market only the locals know about.",
-                mediaType: "image",
-                mediaSrc: "media/photos/krabi.jpg",
-                audioSrc: "media/audio/krabi-waves.mp3",
-                vibe: "High-Intensity Adventure & Coastal Escape"
+                text: "Rugged limestone formations dropping directly into crystal coastal waters. An absolute paradise for off-the-grid adventure and deep culinary discoveries.",
+                mapX: 755, mapY: 248, distance: "8,242 miles",
+                photos: ["media/photos/krabi1.jpg", "media/photos/krabi2.jpg", "media/photos/krabi3.jpg"],
+                audio: "media/audio/krabi-intro.mp3"
             },
-            germany: {
-                title: "Dusseldorf & Hamburg, Germany",
-                persona: "Architectural Mastery, Maritime Grit, & Unexpected Culinary Gems",
-                text: "Experience the ultimate balance of German engineering and vibrant subcultures. In Hamburg, we'll navigate the historic, red-brick Speicherstadt warehouses and feel the pulse of the massive harbor layout. In Dusseldorf, we pivot to striking modern design along the Rhine and dive headfirst into the legendary, authentic Japanese culinary landscape of 'Little Tokyo' for world-class ramen.",
-                mediaType: "image",
-                mediaSrc: "media/photos/germany.jpg",
-                audioSrc: "",
-                vibe: "Architecture, Maritime, & Culinary Cult"
+            berlin: {
+                title: "Berlin, Germany",
+                text: "A grand historical grid combined with unmatched creative subcultures. Berlin is raw, deep, and constantly reinventing its architecture and structural landscape.",
+                mapX: 505, mapY: 102, distance: "5,793 miles",
+                photos: ["media/photos/berlin1.jpg", "media/photos/berlin2.jpg"],
+                audio: "media/audio/berlin-intro.mp3"
             },
-            netherlands: {
-                title: "Amsterdam & Haarlem, The Netherlands",
-                persona: "Interconnected Waterways & Deep Neighborhood Retreats",
-                text: "A perfect dual-pace experience. Master the iconic, bustling rings of canals and historic museums in Amsterdam, then take a seamless 15-minute escape to Haarlem. There, we step back into a quieter, incredibly preserved historic aesthetic with stunning architecture and a truly local, unhurried pace.",
-                mediaType: "image",
-                mediaSrc: "media/photos/netherlands.jpg",
-                audioSrc: "",
-                vibe: "Historic Channels & Hidden Local Towns"
+            dusseldorf: {
+                title: "Düsseldorf, Germany",
+                text: "Sleek modern layout lines running along the Rhine River combined with an incredibly dense and legendary culinary community in Little Tokyo.",
+                mapX: 495, mapY: 105, distance: "5,680 miles",
+                photos: ["media/photos/dusseldorf1.jpg", "media/photos/dusseldorf2.jpg"],
+                audio: "media/audio/dusseldorf-intro.mp3"
             },
-            london: {
-                title: "London, England",
-                persona: "The Global Epicenter & Endless Historical Scale",
-                text: "London is a sprawling compilation of distinct neighborhoods, each carrying its own historic weight and modern cultural identity. I focus on flawless urban tactical execution here: navigating transit lines smoothly, skipping the tourist bottlenecks, and finding those classic, tucked-away gastropubs and cultural markets that hold the true soul of the city.",
-                mediaType: "image",
-                mediaSrc: "media/photos/london.jpg",
-                audioSrc: "",
-                vibe: "Grand Scale Metros & Neighborhood Grid Mastery"
+            dortmund: {
+                title: "Dortmund, Germany",
+                text: "Industrial heritage masterfully repurposed into digital and cultural innovation spaces. Famous for its intense, dedicated sports culture and sprawling green spaces.",
+                mapX: 498, mapY: 104, distance: "5,690 miles",
+                photos: ["media/photos/dortmund1.jpg", "media/photos/dortmund2.jpg"],
+                audio: "media/audio/dortmund-intro.mp3"
+            },
+            amsterdam: {
+                title: "Amsterdam, The Netherlands",
+                text: "A masterclass in historical urban planning. A completely interconnected grid of historic canal paths, artistic hubs, and exceptional biking mobility.",
+                mapX: 488, mapY: 106, distance: "5,655 miles",
+                photos: ["media/photos/amsterdam1.jpg", "media/photos/amsterdam2.jpg"],
+                audio: "media/audio/amsterdam-intro.mp3"
+            },
+            haarlem: {
+                title: "Haarlem, The Netherlands",
+                text: "Classic Dutch architectural history preserved in an unhurried, local pace. Exceptional cobblestone market centers just minutes away from the busy capital core.",
+                mapX: 484, mapY: 106, distance: "5,645 miles",
+                photos: ["media/photos/haarlem1.jpg", "media/photos/haarlem2.jpg"],
+                audio: "media/audio/haarlem-intro.mp3"
+            },
+            seoul: {
+                title: "Seoul, South Korea",
+                text: "Hyper-efficient mass transit, neon cyberpunk alleyways, and imperial palaces coexisting in perfect harmony. The absolute definition of a high-tech metropolis.",
+                mapX: 810, mapY: 150, distance: "5,974 miles",
+                photos: ["media/photos/seoul1.jpg", "media/photos/seoul2.jpg", "media/photos/seoul3.jpg"],
+                audio: "media/audio/seoul-intro.mp3"
             }
         };
 
+        const irvineX = 160;
+        const irvineY = 155;
+        let slideInterval;
+
         function switchDest(key) {
-            // Update button styles to reflect active choice
+            clearInterval(slideInterval); // Clear old slideshow tracking loops
+
             const buttons = document.querySelectorAll('.dest-btn');
             buttons.forEach(btn => {
                 if(btn.getAttribute('onclick').includes(key)) {
-                    btn.className = "dest-btn w-full text-left px-4 py-3 rounded-xl border border-blue-500/30 bg-blue-950/20 text-blue-400 font-semibold transition-all";
+                    btn.className = "dest-btn w-full text-left px-4 py-2 text-sm rounded-lg border border-blue-500/40 bg-blue-950/30 text-blue-400 font-semibold transition-all";
                 } else {
-                    btn.className = "dest-btn w-full text-left px-4 py-3 rounded-xl border border-gray-800 bg-gray-900/40 text-gray-400 hover:bg-gray-900 hover:text-gray-200 transition-all";
+                    btn.className = "dest-btn w-full text-left px-4 py-2 text-sm rounded-lg border border-gray-800 bg-gray-900/40 text-gray-400 hover:bg-gray-900 transition-all";
                 }
             });
 
             const data = destinations[key];
-            const panel = document.getElementById('display-panel');
+            
+            // Map Vector Movements
+            document.getElementById('target-pin').setAttribute('cx', data.mapX);
+            document.getElementById('target-pin').setAttribute('cy', data.mapY);
+            document.getElementById('stickman').setAttribute('transform', `translate(${data.mapX}, ${data.mapY})`);
+            
+            const midX = (irvineX + data.mapX) / 2;
+            const midY = Math.min(irvineY, data.mapY) - 50;
+            document.getElementById('flight-vector').setAttribute('d', `M ${irvineX} ${irvineY} Q ${midX} ${midY} ${data.mapX} ${data.mapY}`);
+            
+            document.getElementById('distance-readout').innerText = data.distance;
 
-            // Set up media element conditional (Video or Image Showcase)
-            let mediaHtml = '';
-            if(data.mediaType === 'video') {
-                mediaHtml = `<video src="${data.mediaSrc}" poster="${data.poster}" autoplay loop muted playsinline class="w-full h-64 object-cover rounded-xl border border-gray-800 mb-6 shadow-md"></video>`;
-            } else {
-                mediaHtml = `<img src="${data.mediaSrc}" alt="${data.title}" class="w-full h-64 object-cover rounded-xl border border-gray-800 mb-6 shadow-md">`;
-            }
+            // Generate HTML structure for the slider setup
+            let photoSlides = data.photos.map((img, i) => 
+                `<img src="${img}" id="slide-${i}" class="slide-img w-full h-72 object-cover rounded-xl border border-gray-800 absolute top-0 left-0 transition-opacity duration-1000 ${i === 0 ? 'opacity-100' : 'opacity-0'}" alt="Slide ${i}">`
+            ).join('');
 
-            // Set up optional background ambient track
-            let audioHtml = '';
-            if(data.audioSrc) {
-                audioHtml = `
-                    <div class="mt-6 p-3 bg-gray-900 rounded-xl border border-gray-800 flex items-center justify-between">
-                        <span class="text-xs font-mono text-gray-400 flex items-center">🎵 Ambient Track Available:</span>
-                        <audio src="${data.audioSrc}" controls class="h-6 max-w-[180px] sm:max-w-xs invert opacity-60"></audio>
-                    </div>`;
-            }
-
-            // Inject the elements with sharp formatting layouts
-            panel.innerHTML = `
+            document.getElementById('display-panel').innerHTML = `
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-gray-900 pb-4 mb-4 gap-2">
-                    <div>
-                        <h3 class="text-2xl font-bold text-white tracking-tight">${data.title}</h3>
-                        <p class="text-xs font-mono text-blue-400 uppercase mt-0.5">${data.persona}</p>
-                    </div>
-                    <span class="text-xs font-mono bg-gray-900 text-gray-400 border border-gray-800 px-3 py-1 rounded-full whitespace-nowrap">${data.vibe}</span>
+                    <h3 class="text-2xl font-bold text-white tracking-tight">${data.title}</h3>
+                    <span class="text-xs font-mono bg-gray-900 text-gray-400 border border-gray-800 px-3 py-1 rounded-full">${data.distance} from HQ</span>
                 </div>
-                ${mediaHtml}
+                
+                <!-- Slideshow Container -->
+                <div class="relative w-full h-72 mb-6 overflow-hidden rounded-xl bg-gray-900">
+                    ${photoSlides}
+                </div>
+
+                <!-- Custom Voice Introduction Audio Component -->
+                <div class="mb-6 p-4 bg-gray-900 rounded-xl border border-blue-950/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div>
+                        <p class="text-xs font-mono text-blue-400 font-bold uppercase tracking-wider">🎙️ AUDIO BRIEFING AVAILABLE</p>
+                        <p class="text-xs text-gray-500 mt-0.5">Listen to Pete's on-the-ground notes for this location.</p>
+                    </div>
+                    <audio id="destination-audio" src="${data.audio}" controls autoplay class="h-8 w-full sm:max-w-xs invert opacity-90"></audio>
+                </div>
+
                 <p class="text-gray-300 leading-relaxed text-sm sm:text-base">${data.text}</p>
-                ${audioHtml}
             `;
+
+            // Slideshow Rotation Logic Loop
+            let currentSlide = 0;
+            const totalSlides = data.photos.length;
+            
+            if (totalSlides > 1) {
+                slideInterval = setInterval(() => {
+                    const activeImg = document.getElementById(`slide-${currentSlide}`);
+                    if (activeImg) activeImg.classList.replace('opacity-100', 'opacity-0');
+                    
+                    currentSlide = (currentSlide + 1) % totalSlides;
+                    
+                    const nextImg = document.getElementById(`slide-${currentSlide}`);
+                    if (nextImg) nextImg.classList.replace('opacity-0', 'opacity-100');
+                }, 3500); // Transitions slide views smoothly every 3.5 seconds
+            }
         }
 
-        // Initialize display panel with first destination on load
         document.addEventListener("DOMContentLoaded", () => {
-            switchDest('seoul');
+            switchDest('bangkok'); // Default launch hub on startup
         });
     </script>
 </body>
