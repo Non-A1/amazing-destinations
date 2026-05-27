@@ -23,7 +23,6 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
-    <!-- Header / Navigation -->
     <header class="border-b border-gray-800 bg-gray-950/80 backdrop-blur sticky top-0 z-50 px-6 py-4">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
             <h1 class="text-xl font-mono tracking-widest text-blue-500 font-bold accent-glow">THE GROUND LEVEL</h1>
@@ -34,16 +33,13 @@
         </div>
     </header>
 
-    <!-- Main Content -->
     <main class="max-w-6xl mx-auto px-6 py-12 flex-grow w-full space-y-12">
         
-        <!-- Hero Section -->
         <section class="text-center max-w-3xl mx-auto">
             <h2 class="text-4xl sm:text-5xl font-black tracking-tight mb-4 text-white">My Top <span class="text-blue-500">Destinations</span></h2>
             <p class="text-gray-400 text-lg">Track the vectors from my base station in Irvine, California across my highest-rated global routes.</p>
         </section>
 
-        <!-- Trekking Map Visualizer -->
         <section class="bg-gray-950 border border-gray-800 rounded-2xl p-4 shadow-2xl relative">
             <div class="absolute top-4 left-4 bg-gray-900/90 border border-gray-800 rounded-lg px-4 py-2 z-10 font-mono text-xs">
                 <span class="text-gray-500">DEPARTURE STATION:</span> <span class="text-blue-400 font-bold">Irvine, CA</span><br>
@@ -51,14 +47,12 @@
             </div>
             
             <svg id="world-map" viewBox="0 0 1000 500" class="w-full h-auto bg-[#0d1321] rounded-xl border border-gray-900">
-                <!-- Base Grid Lines -->
                 <g stroke="#1e293b" stroke-width="0.5" stroke-dasharray="2 4">
                     <line x1="0" y1="125" x2="1000" y2="125" /><line x1="0" y1="250" x2="1000" y2="250" />
                     <line x1="0" y1="375" x2="1000" y2="375" /><line x1="250" y1="0" x2="250" y2="500" />
                     <line x1="500" y1="0" x2="500" y2="500" /><line x1="750" y1="0" x2="750" y2="500" />
                 </g>
 
-                <!-- Map Shapes -->
                 <g fill="#1e293b" opacity="0.6">
                     <path d="M100,80 L220,60 L260,140 L180,240 L120,200 Z" />
                     <path d="M220,260 L280,300 L250,450 L200,320 Z" />
@@ -71,7 +65,6 @@
                 <circle cx="160" cy="155" r="5" fill="#3b82f6" class="animate-pulse" />
                 <circle id="target-pin" cx="160" cy="155" r="5" fill="#10b981" />
 
-                <!-- Backpack Stickman -->
                 <g id="stickman" transform="translate(160, 155)">
                     <rect x="-10" y="-22" width="6" height="12" rx="2" fill="#ef4444" />
                     <circle cx="0" cy="-25" r="4" fill="#ffffff" />
@@ -83,10 +76,8 @@
             </svg>
         </section>
 
-        <!-- Destination Console Layout Ordered by Priority -->
         <section class="grid grid-cols-1 lg:grid-cols-12 gap-8">
             
-            <!-- Ordered Left Sidebar -->
             <div class="lg:col-span-4 space-y-4">
                 <div>
                     <h3 class="text-xs font-mono text-gray-500 uppercase tracking-wider pl-2 mb-1">#1 THAILAND</h3>
@@ -100,7 +91,7 @@
                     <h3 class="text-xs font-mono text-gray-500 uppercase tracking-wider pl-2 mb-1">#2 GERMANY</h3>
                     <div class="space-y-1">
                         <button onclick="switchDest('berlin')" class="dest-btn w-full text-left px-4 py-2 text-sm rounded-lg border border-gray-800 bg-gray-900/40 text-gray-400 hover:bg-gray-900 transition-all">Berlin</button>
-                        <button onclick="switchDest('dusseldorf')" class="dest-btn w-full text-left px-4 py-2 text-sm rounded-lg border border-gray-800 bg-gray-900/40 text-gray-400 hover:bg-gray-900 transition-all">Düsseldorf</button>
+                        <button onclick="switchDest('hamburg')" class="dest-btn w-full text-left px-4 py-2 text-sm rounded-lg border border-gray-800 bg-gray-900/40 text-gray-400 hover:bg-gray-900 transition-all">Hamburg</button>
                         <button onclick="switchDest('dortmund')" class="dest-btn w-full text-left px-4 py-2 text-sm rounded-lg border border-gray-800 bg-gray-900/40 text-gray-400 hover:bg-gray-900 transition-all">Dortmund</button>
                     </div>
                 </div>
@@ -121,10 +112,8 @@
                 </div>
             </div>
 
-            <!-- Interactive Media Dashboard Display Panel -->
             <div id="display-panel" class="lg:col-span-8 bg-gray-950 border border-gray-800 rounded-2xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
-                <!-- Content generated dynamically -->
-            </div>
+                </div>
         </section>
     </main>
 
@@ -133,7 +122,7 @@
     </footer>
 
     <script>
-        // Structured Database Map
+        // Structured Database Map Matrix
         const destinations = {
             bangkok: {
                 title: "Bangkok, Thailand",
@@ -156,12 +145,12 @@
                 photos: ["media/photos/berlin1.jpg", "media/photos/berlin2.jpg", "media/photos/berlin3.jpg", "media/photos/berlin4.jpg", "media/photos/berlin5.jpg"],
                 audio: "media/audio/berlin-intro.mp3"
             },
-            dusseldorf: {
-                title: "Düsseldorf, Germany",
-                text: "Sleek modern layout lines running along the Rhine River combined with an incredibly dense and legendary culinary community in Little Tokyo.",
-                mapX: 495, mapY: 105, distance: "5,680 miles",
-                photos: ["media/photos/dusseldorf1.jpg", "media/photos/dusseldorf2.jpg"],
-                audio: "media/audio/dusseldorf-intro.mp3"
+            hamburg: {
+                title: "Hamburg, Germany",
+                text: "A legendary maritime hub defined by architectural grit and immense water networks. We will navigate the historic, red-brick Speicherstadt warehouse district and experience the unmatched, high-intensity energy of one of Europe's largest active ports.",
+                mapX: 502, mapY: 98, distance: "5,627 miles",
+                photos: ["media/photos/hamburg1.jpg", "media/photos/hamburg2.jpg"],
+                audio: "media/audio/hamburg-intro.mp3"
             },
             dortmund: {
                 title: "Dortmund, Germany",
@@ -198,7 +187,7 @@
         let slideInterval;
 
         function switchDest(key) {
-            clearInterval(slideInterval); // Clear old slideshow tracking loops
+            clearInterval(slideInterval); // Stop old active slideshow transitions
 
             const buttons = document.querySelectorAll('.dest-btn');
             buttons.forEach(btn => {
@@ -211,7 +200,7 @@
 
             const data = destinations[key];
             
-            // Map Vector Movements
+            // Map Vectors Calculations
             document.getElementById('target-pin').setAttribute('cx', data.mapX);
             document.getElementById('target-pin').setAttribute('cy', data.mapY);
             document.getElementById('stickman').setAttribute('transform', `translate(${data.mapX}, ${data.mapY})`);
@@ -222,7 +211,7 @@
             
             document.getElementById('distance-readout').innerText = data.distance;
 
-            // Generate HTML structure for the slider setup
+            // Generate Layout Render Output
             let photoSlides = data.photos.map((img, i) => 
                 `<img src="${img}" id="slide-${i}" class="slide-img w-full h-72 object-cover rounded-xl border border-gray-800 absolute top-0 left-0 transition-opacity duration-1000 ${i === 0 ? 'opacity-100' : 'opacity-0'}" alt="Slide ${i}">`
             ).join('');
@@ -233,12 +222,10 @@
                     <span class="text-xs font-mono bg-gray-900 text-gray-400 border border-gray-800 px-3 py-1 rounded-full">${data.distance} from HQ</span>
                 </div>
                 
-                <!-- Slideshow Container -->
                 <div class="relative w-full h-72 mb-6 overflow-hidden rounded-xl bg-gray-900">
                     ${photoSlides}
                 </div>
 
-                <!-- Custom Voice Introduction Audio Component -->
                 <div class="mb-6 p-4 bg-gray-900 rounded-xl border border-blue-950/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div>
                         <p class="text-xs font-mono text-blue-400 font-bold uppercase tracking-wider">🎙️ AUDIO BRIEFING AVAILABLE</p>
@@ -250,7 +237,7 @@
                 <p class="text-gray-300 leading-relaxed text-sm sm:text-base">${data.text}</p>
             `;
 
-            // Slideshow Rotation Logic Loop
+            // Core Slideshow Rotation Automation Engine
             let currentSlide = 0;
             const totalSlides = data.photos.length;
             
@@ -263,12 +250,12 @@
                     
                     const nextImg = document.getElementById(`slide-${currentSlide}`);
                     if (nextImg) nextImg.classList.replace('opacity-0', 'opacity-100');
-                }, 3500); // Transitions slide views smoothly every 3.5 seconds
+                }, 3500); 
             }
         }
 
         document.addEventListener("DOMContentLoaded", () => {
-            switchDest('bangkok'); // Default launch hub on startup
+            switchDest('bangkok'); // Automatically launches top priority destination on load
         });
     </script>
 </body>
