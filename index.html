@@ -3,233 +3,234 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Ground Level | Top Destinations</title>
+    <title>The Ground Level | Dynamic Global Portfolio</title>
+    
+    <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Leaflet.js Interactive Map Assets -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
     <style>
         body { background-color: #0b0f19; color: #f3f4f6; font-family: system-ui, -apple-system, sans-serif; }
         .accent-glow { text-shadow: 0 0 12px rgba(59, 130, 246, 0.5); }
         
-        .trek-path {
-            stroke-dasharray: 6;
-            animation: dash 30s linear infinite;
+        /* Dark Theme adjustment overlay for OpenStreetMap layer */
+        .dark-map .leaflet-tile-container {
+            filter: invert(100%) hue-rotate(180deg) brightness(85%) contrast(90%);
         }
-        @keyframes dash {
-            to { stroke-dashoffset: -20; }
-        }
-        #stickman {
-            transition: all 1.8s cubic-bezier(0.4, 0, 0.2, 1);
+        .leaflet-container { background: #0d1321; }
+        
+        /* Smooth transformation vector for stickman map movement */
+        .animated-stickman {
+            transition: transform 2.2s cubic-bezier(0.25, 1, 0.5, 1);
         }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
+    <!-- Header / Navigation -->
     <header class="border-b border-gray-800 bg-gray-950/80 backdrop-blur sticky top-0 z-50 px-6 py-4">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
             <h1 class="text-xl font-mono tracking-widest text-blue-500 font-bold accent-glow">THE GROUND LEVEL</h1>
-            <div id="intro-player-container" class="flex items-center space-x-3 bg-gray-900 px-4 py-2 rounded-lg border border-gray-800">
+            <div class="flex items-center space-x-3 bg-gray-900 px-4 py-2 rounded-lg border border-gray-800">
                 <span class="text-xs font-mono text-gray-400">GUIDE BRIEFING:</span>
                 <audio id="intro-audio" src="media/audio/intro.mp3" controls class="h-8 max-w-[200px] sm:max-w-xs invert opacity-80"></audio>
             </div>
         </div>
     </header>
 
-    <main class="max-w-6xl mx-auto px-6 py-12 flex-grow w-full space-y-12">
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-6 py-12 flex-grow w-full space-y-8">
         
         <section class="text-center max-w-3xl mx-auto">
-            <h2 class="text-4xl sm:text-5xl font-black tracking-tight mb-4 text-white">My Top <span class="text-blue-500">Destinations</span></h2>
-            <p class="text-gray-400 text-lg">Track the vectors from my base station in Irvine, California across my highest-rated global routes.</p>
+            <h2 class="text-4xl sm:text-5xl font-black tracking-tight mb-4 text-white">Interactive Curation <span class="text-blue-500">Console</span></h2>
+            <p class="text-gray-400 text-sm sm:text-base">Click any destination node directly embedded in the live global tracking grid below to deploy data packets.</p>
         </section>
 
-        <section class="bg-gray-950 border border-gray-800 rounded-2xl p-4 shadow-2xl relative">
-            <div class="absolute top-4 left-4 bg-gray-900/90 border border-gray-800 rounded-lg px-4 py-2 z-10 font-mono text-xs">
-                <span class="text-gray-500">DEPARTURE STATION:</span> <span class="text-blue-400 font-bold">Irvine, CA</span><br>
-                <span class="text-gray-500">RANGE TO TARGET:</span> <span id="distance-readout" class="text-emerald-400 font-bold">0 miles</span>
+        <!-- Dynamic Leaflet Map Element Window -->
+        <section class="bg-gray-950 border border-gray-800 rounded-2xl p-3 shadow-2xl relative">
+            <div class="absolute top-6 left-6 bg-gray-950/90 border border-gray-800 rounded-lg px-4 py-2 z-[1000] font-mono text-xs shadow-xl backdrop-blur">
+                <span class="text-gray-500">BASE STATION:</span> <span class="text-blue-400 font-bold">Irvine, CA</span><br>
+                <span class="text-gray-500">RANGE VALUE:</span> <span id="distance-readout" class="text-emerald-400 font-bold">0 miles</span>
             </div>
-            
-            <svg id="world-map" viewBox="0 0 1000 500" class="w-full h-auto bg-[#0d1321] rounded-xl border border-gray-900">
-                <g stroke="#1e293b" stroke-width="0.5" stroke-dasharray="2 4">
-                    <line x1="0" y1="125" x2="1000" y2="125" /><line x1="0" y1="250" x2="1000" y2="250" />
-                    <line x1="0" y1="375" x2="1000" y2="375" /><line x1="250" y1="0" x2="250" y2="500" />
-                    <line x1="500" y1="0" x2="500" y2="500" /><line x1="750" y1="0" x2="750" y2="500" />
-                </g>
-
-                <g fill="#1e293b" opacity="0.6">
-                    <path d="M100,80 L220,60 L260,140 L180,240 L120,200 Z" />
-                    <path d="M220,260 L280,300 L250,450 L200,320 Z" />
-                    <path d="M420,60 L750,40 L850,180 L650,250 L480,180 Z" />
-                    <path d="M450,200 L540,220 L560,380 L460,340 Z" />
-                    <path d="M780,320 L880,340 L840,420 L750,380 Z" />
-                </g>
-
-                <path id="flight-vector" d="" fill="none" stroke="#3b82f6" stroke-width="2" class="trek-path" opacity="0.4"/>
-                <circle cx="160" cy="155" r="5" fill="#3b82f6" class="animate-pulse" />
-                <circle id="target-pin" cx="160" cy="155" r="5" fill="#10b981" />
-
-                <g id="stickman" transform="translate(160, 155)">
-                    <rect x="-10" y="-22" width="6" height="12" rx="2" fill="#ef4444" />
-                    <circle cx="0" cy="-25" r="4" fill="#ffffff" />
-                    <line x1="0" y1="-21" x2="0" y2="-10" stroke="#ffffff" stroke-width="2" />
-                    <line x1="-5" y1="-18" x2="5" y2="-18" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
-                    <line x1="0" y1="-10" x2="-4" y2="0" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
-                    <line x1="0" y1="-10" x2="4" y2="0" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
-                </g>
-            </svg>
+            <!-- Actual Map Frame Container -->
+            <div id="map" class="w-full h-[380px] sm:h-[450px] rounded-xl border border-gray-900 dark-map"></div>
         </section>
 
-        <section class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            
-            <div class="lg:col-span-4 space-y-4">
-                <div>
-                    <h3 class="text-xs font-mono text-gray-500 uppercase tracking-wider pl-2 mb-1">#1 THAILAND</h3>
-                    <div class="space-y-1">
-                        <button onclick="switchDest('bangkok')" class="dest-btn w-full text-left px-4 py-2 text-sm rounded-lg border border-gray-800 bg-gray-900/40 text-gray-400 hover:bg-gray-900 transition-all">Bangkok</button>
-                        <button onclick="switchDest('krabi')" class="dest-btn w-full text-left px-4 py-2 text-sm rounded-lg border border-gray-800 bg-gray-900/40 text-gray-400 hover:bg-gray-900 transition-all">Krabi</button>
-                    </div>
-                </div>
-
-                <div>
-                    <h3 class="text-xs font-mono text-gray-500 uppercase tracking-wider pl-2 mb-1">#2 GERMANY</h3>
-                    <div class="space-y-1">
-                        <button onclick="switchDest('berlin')" class="dest-btn w-full text-left px-4 py-2 text-sm rounded-lg border border-gray-800 bg-gray-900/40 text-gray-400 hover:bg-gray-900 transition-all">Berlin</button>
-                        <button onclick="switchDest('hamburg')" class="dest-btn w-full text-left px-4 py-2 text-sm rounded-lg border border-gray-800 bg-gray-900/40 text-gray-400 hover:bg-gray-900 transition-all">Hamburg</button>
-                        <button onclick="switchDest('dortmund')" class="dest-btn w-full text-left px-4 py-2 text-sm rounded-lg border border-gray-800 bg-gray-900/40 text-gray-400 hover:bg-gray-900 transition-all">Dortmund</button>
-                    </div>
-                </div>
-
-                <div>
-                    <h3 class="text-xs font-mono text-gray-500 uppercase tracking-wider pl-2 mb-1">#3 THE NETHERLANDS</h3>
-                    <div class="space-y-1">
-                        <button onclick="switchDest('amsterdam')" class="dest-btn w-full text-left px-4 py-2 text-sm rounded-lg border border-gray-800 bg-gray-900/40 text-gray-400 hover:bg-gray-900 transition-all">Amsterdam</button>
-                        <button onclick="switchDest('haarlem')" class="dest-btn w-full text-left px-4 py-2 text-sm rounded-lg border border-gray-800 bg-gray-900/40 text-gray-400 hover:bg-gray-900 transition-all">Haarlem</button>
-                    </div>
-                </div>
-
-                <div>
-                    <h3 class="text-xs font-mono text-gray-500 uppercase tracking-wider pl-2 mb-1">#4 SOUTH KOREA</h3>
-                    <div class="space-y-1">
-                        <button onclick="switchDest('seoul')" class="dest-btn w-full text-left px-4 py-2 text-sm rounded-lg border border-gray-800 bg-gray-900/40 text-gray-400 hover:bg-gray-900 transition-all">Seoul</button>
-                    </div>
-                </div>
+        <!-- Media Display Unit -->
+        <section class="max-w-4xl mx-auto w-full">
+            <div id="display-panel" class="bg-gray-950 border border-gray-800 rounded-2xl p-6 sm:p-8 shadow-2xl relative overflow-hidden hidden">
+                <!-- Data sets append here dynamically upon stickman terminal arrival -->
             </div>
-
-            <div id="display-panel" class="lg:col-span-8 bg-gray-950 border border-gray-800 rounded-2xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
-                </div>
         </section>
     </main>
 
     <footer class="border-t border-gray-900 bg-gray-950/50 py-6 text-center text-xs font-mono text-gray-600">
-        &copy; 2026 THE GROUND LEVEL. GLOBAL PORTFOLIO ARCHIVE.
+        &copy; 2026 THE GROUND LEVEL. MAP-INTEGRATED EXPEDITION MATRIX.
     </footer>
 
     <script>
-        // Structured Database Map Matrix
+        // Precision Coordinates Mapping Latitudes & Longitudes
+        const originCoords = [33.6846, -117.8265]; // Irvine, California
+        
         const destinations = {
             bangkok: {
                 title: "Bangkok, Thailand",
+                coords: [13.7563, 100.5018], distance: "8,255 miles",
                 text: "The high-velocity heart of Southeast Asia. Bangkok challenges your senses with its complex maze of street food networks, ancient golden temple architecture, and chaotic modern energy.",
-                mapX: 760, mapY: 230, distance: "8,255 miles",
-                photos: ["media/photos/bangkok1.jpg", "media/photos/bangkok2.jpg", "media/photos/bangkok3.jpg"],
+                photos: ["media/photos/bangkok1.jpg", "media/photos/bangkok2.jpg", "media/photos/bangkok3.jpg", "media/photos/bangkok4.jpg", "media/photos/bangkok5.jpg", "media/photos/bangkok6.jpg"],
                 audio: "media/audio/bangkok-intro.mp3"
             },
             krabi: {
                 title: "Krabi, Thailand",
+                coords: [8.0584, 98.9169], distance: "8,242 miles",
                 text: "Rugged limestone formations dropping directly into crystal coastal waters. An absolute paradise for off-the-grid adventure and deep culinary discoveries.",
-                mapX: 755, mapY: 248, distance: "8,242 miles",
-                photos: ["media/photos/krabi1.jpg", "media/photos/krabi2.jpg", "media/photos/krabi3.jpg"],
+                photos: ["media/photos/krabi1.jpg", "media/photos/krabi2.jpg", "media/photos/krabi3.jpg", "media/photos/krabi4.jpg", "media/photos/krabi5.jpg"],
                 audio: "media/audio/krabi-intro.mp3"
             },
             berlin: {
                 title: "Berlin, Germany",
+                coords: [52.5200, 13.4050], distance: "5,793 miles",
                 text: "A grand historical grid combined with unmatched creative subcultures. Berlin is raw, deep, and constantly reinventing its architecture and structural landscape.",
-                mapX: 505, mapY: 102, distance: "5,793 miles",
                 photos: ["media/photos/berlin1.jpg", "media/photos/berlin2.jpg", "media/photos/berlin3.jpg", "media/photos/berlin4.jpg", "media/photos/berlin5.jpg"],
                 audio: "media/audio/berlin-intro.mp3"
             },
             hamburg: {
                 title: "Hamburg, Germany",
-                text: "A legendary maritime hub defined by architectural grit and immense water networks. We will navigate the historic, red-brick Speicherstadt warehouse district and experience the unmatched, high-intensity energy of one of Europe's largest active ports.",
-                mapX: 502, mapY: 98, distance: "5,627 miles",
-                photos: ["media/photos/hamburg1.jpg", "media/photos/hamburg2.jpg"],
+                coords: [53.5511, 9.9937], distance: "5,627 miles",
+                text: "A legendary maritime hub defined by architectural grit and immense water networks. We will navigate the historic, red-brick warehouse district and experience Europe's largest active ports.",
+                photos: ["media/photos/hamburg1.jpg", "media/photos/hamburg2.jpg", "media/photos/hamburg3.jpg", "media/photos/hamburg4.jpg"],
                 audio: "media/audio/hamburg-intro.mp3"
             },
             dortmund: {
                 title: "Dortmund, Germany",
-                text: "Industrial heritage masterfully repurposed into digital and cultural innovation spaces. Famous for its intense, dedicated sports culture and sprawling green spaces.",
-                mapX: 498, mapY: 104, distance: "5,690 miles",
-                photos: ["media/photos/dortmund1.jpg", "media/photos/dortmund2.jpg"],
+                coords: [51.5136, 7.4653], distance: "5,690 miles",
+                text: "Industrial heritage masterfully repurposed into digital and cultural innovation spaces. Famous for its intense sports culture and sprawling green spaces.",
+                photos: ["media/photos/dortmund1.jpg", "media/photos/dortmund2.jpg", "media/photos/dortmund3.jpg", "media/photos/dortmund4.jpg", "media/photos/dortmund5.jpg", "media/photos/dortmund6.jpg"],
                 audio: "media/audio/dortmund-intro.mp3"
             },
             amsterdam: {
                 title: "Amsterdam, The Netherlands",
+                coords: [52.3676, 4.9041], distance: "5,655 miles",
                 text: "A masterclass in historical urban planning. A completely interconnected grid of historic canal paths, artistic hubs, and exceptional biking mobility.",
-                mapX: 488, mapY: 106, distance: "5,655 miles",
-                photos: ["media/photos/amsterdam1.jpg", "media/photos/amsterdam2.jpg"],
+                photos: ["media/photos/amsterdam1.jpg", "media/photos/amsterdam2.jpg", "media/photos/amsterdam3.jpg", "media/photos/amsterdam4.jpg"],
                 audio: "media/audio/amsterdam-intro.mp3"
             },
             haarlem: {
                 title: "Haarlem, The Netherlands",
+                coords: [52.3874, 4.6462], distance: "5,645 miles",
                 text: "Classic Dutch architectural history preserved in an unhurried, local pace. Exceptional cobblestone market centers just minutes away from the busy capital core.",
-                mapX: 484, mapY: 106, distance: "5,645 miles",
-                photos: ["media/photos/haarlem1.jpg", "media/photos/haarlem2.jpg"],
+                photos: ["media/photos/haarlem1.jpg", "media/photos/haarlem2.jpg", "media/photos/haarlem3.jpg", "media/photos/haarlem4.jpg"],
                 audio: "media/audio/haarlem-intro.mp3"
             },
             seoul: {
                 title: "Seoul, South Korea",
+                coords: [37.5665, 126.9780], distance: "5,974 miles",
                 text: "Hyper-efficient mass transit, neon cyberpunk alleyways, and imperial palaces coexisting in perfect harmony. The absolute definition of a high-tech metropolis.",
-                mapX: 810, mapY: 150, distance: "5,974 miles",
-                photos: ["media/photos/seoul1.jpg", "media/photos/seoul2.jpg", "media/photos/seoul3.jpg"],
+                photos: ["media/photos/seoul1.jpg", "media/photos/seoul2.jpg", "media/photos/seoul3.jpg", "media/photos/seoul4.jpg", "media/photos/seoul5.jpg", "media/photos/seoul6.jpg"],
                 audio: "media/audio/seoul-intro.mp3"
             }
         };
 
-        const irvineX = 160;
-        const irvineY = 155;
-        let slideInterval;
+        // Initialize Map Object
+        const map = L.map('map', { center: [30, -30], zoom: 2, minZoom: 2 });
+        
+        // Add OpenStreetMap Realistic Street/Terrain Tile sets
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
 
-        function switchDest(key) {
-            clearInterval(slideInterval); // Stop old active slideshow transitions
+        // Define Customized Stickman Vector Icon Graphic
+        const stickmanSvg = `
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="-15 -30 30 40" width="30" height="40" class="animated-stickman">
+                <rect x="-10" y="-22" width="6" height="12" rx="2" fill="#ef4444" />
+                <circle cx="0" cy="-25" r="4" fill="#3b82f6" stroke="#ffffff" stroke-width="1"/>
+                <line x1="0" y1="-21" x2="0" y2="-10" stroke="#ffffff" stroke-width="2" />
+                <line x1="-5" y1="-18" x2="5" y2="-18" stroke="#ffffff" stroke-width="2" />
+                <line x1="0" y1="-10" x2="-4" y2="0" stroke="#ffffff" stroke-width="2" />
+                <line x1="0" y1="-10" x2="4" y2="0" stroke="#ffffff" stroke-width="2" />
+            </svg>`;
+        
+        const stickmanIcon = L.divIcon({
+            html: stickmanSvg,
+            className: 'custom-stickman-marker',
+            iconSize: [30, 40],
+            iconAnchor: [15, 10]
+        });
 
-            const buttons = document.querySelectorAll('.dest-btn');
-            buttons.forEach(btn => {
-                if(btn.getAttribute('onclick').includes(key)) {
-                    btn.className = "dest-btn w-full text-left px-4 py-2 text-sm rounded-lg border border-blue-500/40 bg-blue-950/30 text-blue-400 font-semibold transition-all";
-                } else {
-                    btn.className = "dest-btn w-full text-left px-4 py-2 text-sm rounded-lg border border-gray-800 bg-gray-900/40 text-gray-400 hover:bg-gray-900 transition-all";
-                }
-            });
+        // Initialize Base Coordinates Markers
+        L.marker(originCoords, {
+            icon: L.divIcon({ html: '<div class="w-3 h-3 bg-blue-500 rounded-full border-2 border-white animate-pulse"></div>', className: '' })
+        }).addTo(map);
 
+        const stickmanMarker = L.marker(originCoords, { icon: stickmanIcon, zIndexOffset: 1000 }).addTo(map);
+        
+        let currentFlightLine = null;
+        let slideInterval = null;
+
+        // Populate Destination Target Pins Onto Map Layout
+        Object.keys(destinations).forEach(key => {
+            const dest = destinations[key];
+            const marker = L.marker(dest.coords, {
+                icon: L.divIcon({ html: '<div class="w-4 h-4 bg-emerald-500 rounded-full border-2 border-gray-950 hover:scale-125 transition-transform cursor-pointer"></div>', className: '' })
+            }).addTo(map);
+            
+            marker.on('click', () => triggerTrek(key));
+        });
+
+        // Core Animation and Sequence Controller Routing Logic
+        function triggerTrek(key) {
+            clearInterval(slideInterval);
             const data = destinations[key];
-            
-            // Map Vectors Calculations
-            document.getElementById('target-pin').setAttribute('cx', data.mapX);
-            document.getElementById('target-pin').setAttribute('cy', data.mapY);
-            document.getElementById('stickman').setAttribute('transform', `translate(${data.mapX}, ${data.mapY})`);
-            
-            const midX = (irvineX + data.mapX) / 2;
-            const midY = Math.min(irvineY, data.mapY) - 50;
-            document.getElementById('flight-vector').setAttribute('d', `M ${irvineX} ${irvineY} Q ${midX} ${midY} ${data.mapX} ${data.mapY}`);
             
             document.getElementById('distance-readout').innerText = data.distance;
 
-            // Generate Layout Render Output
+            // Remove existing flight polyline vectors
+            if (currentFlightLine) map.removeLayer(currentFlightLine);
+
+            // Draw real geodesic tracking path line
+            currentFlightLine = L.polyline([originCoords, data.coords], {
+                color: '#3b82f6', weight: 2, dashArray: '6, 8', opacity: 0.7
+            }).addTo(map);
+
+            // Pan camera bounds smoothly to clear path view frame
+            map.fitBounds([originCoords, data.coords], { padding: [50, 50], maxZoom: 4 });
+
+            // Physically animate stickman marker properties across geographic spaces
+            setTimeout(() => {
+                stickmanMarker.setLatLng(data.coords);
+                
+                // Track complete transit sequence, then initialize dynamic media deployment
+                setTimeout(() => {
+                    deployMediaDashboard(data);
+                }, 2200); // Set to execute precisely upon transit termination vector
+            }, 300);
+        }
+
+        function deployMediaDashboard(data) {
+            const panel = document.getElementById('display-panel');
+            panel.classList.remove('hidden');
+            
             let photoSlides = data.photos.map((img, i) => 
-                `<img src="${img}" id="slide-${i}" class="slide-img w-full h-72 object-cover rounded-xl border border-gray-800 absolute top-0 left-0 transition-opacity duration-1000 ${i === 0 ? 'opacity-100' : 'opacity-0'}" alt="Slide ${i}">`
+                `<img src="${img}" id="slide-${i}" class="slide-img w-full h-64 sm:h-80 object-cover rounded-xl border border-gray-800 absolute top-0 left-0 transition-opacity duration-1000 ${i === 0 ? 'opacity-100' : 'opacity-0'}" alt="Slide ${i}">`
             ).join('');
 
-            document.getElementById('display-panel').innerHTML = `
+            panel.innerHTML = `
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-gray-900 pb-4 mb-4 gap-2">
                     <h3 class="text-2xl font-bold text-white tracking-tight">${data.title}</h3>
                     <span class="text-xs font-mono bg-gray-900 text-gray-400 border border-gray-800 px-3 py-1 rounded-full">${data.distance} from HQ</span>
                 </div>
                 
-                <div class="relative w-full h-72 mb-6 overflow-hidden rounded-xl bg-gray-900">
+                <div class="relative w-full h-64 sm:h-80 mb-6 overflow-hidden rounded-xl bg-gray-900 shadow-inner">
                     ${photoSlides}
                 </div>
 
-                <div class="mb-6 p-4 bg-gray-900 rounded-xl border border-blue-950/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div class="mb-6 p-4 bg-gray-900 rounded-xl border border-blue-950/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-md">
                     <div>
-                        <p class="text-xs font-mono text-blue-400 font-bold uppercase tracking-wider">🎙️ AUDIO BRIEFING AVAILABLE</p>
-                        <p class="text-xs text-gray-500 mt-0.5">Listen to Pete's on-the-ground notes for this location.</p>
+                        <p class="text-xs font-mono text-blue-400 font-bold uppercase tracking-wider">🎙️ AUDIO BRIEFING DEPLOYED</p>
+                        <p class="text-xs text-gray-500 mt-0.5">Playing on-the-ground briefing for this terminal position.</p>
                     </div>
                     <audio id="destination-audio" src="${data.audio}" controls autoplay class="h-8 w-full sm:max-w-xs invert opacity-90"></audio>
                 </div>
@@ -237,10 +238,12 @@
                 <p class="text-gray-300 leading-relaxed text-sm sm:text-base">${data.text}</p>
             `;
 
-            // Core Slideshow Rotation Automation Engine
+            // Scroll user view down cleanly to the populated content panel automatically
+            panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+            // Fire slideshow automation loop
             let currentSlide = 0;
             const totalSlides = data.photos.length;
-            
             if (totalSlides > 1) {
                 slideInterval = setInterval(() => {
                     const activeImg = document.getElementById(`slide-${currentSlide}`);
@@ -250,13 +253,9 @@
                     
                     const nextImg = document.getElementById(`slide-${currentSlide}`);
                     if (nextImg) nextImg.classList.replace('opacity-0', 'opacity-100');
-                }, 3500); 
+                }, 3500);
             }
         }
-
-        document.addEventListener("DOMContentLoaded", () => {
-            switchDest('bangkok'); // Automatically launches top priority destination on load
-        });
     </script>
 </body>
 </html>
