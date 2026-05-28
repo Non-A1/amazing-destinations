@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amazing Destinations | Interactive Grid</title>
+    <title>Amazing Destinations | Pete's Favorite Places on Earth</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -14,13 +14,13 @@
         body { background-color: #0b0f19; color: #f3f4f6; font-family: system-ui, -apple-system, sans-serif; overflow: hidden; }
         .accent-glow { text-shadow: 0 0 15px rgba(59, 130, 246, 0.6); }
         
-        /* Dark map inversion rules for an immersive tech-aesthetic */
+        /* Dark map inversion rules for tactical aesthetic styling */
         .dark-map .leaflet-tile-container {
             filter: invert(100%) hue-rotate(180deg) brightness(85%) contrast(90%);
         }
         .leaflet-container { background: #0d1321; }
         
-        /* Smooth transitions for moving map icons */
+        /* Hardware accelerated layout transitions for vehicles */
         .animated-vehicle {
             transition: transform 2.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
         }
@@ -32,7 +32,7 @@
         <div class="max-w-2xl space-y-6">
             <h1 class="text-xs font-mono tracking-widest text-blue-500 uppercase font-bold accent-glow">THE GROUND LEVEL</h1>
             <h2 class="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight">
-                Amazing Destinations - <br><span class="text-blue-500">Places that brought me joy and excitement</span>
+                Amazing Destinations - <br><span class="text-blue-500">Pete's Favorite Places on Earth</span>
             </h2>
             <button onclick="launchWebsite()" class="mt-4 px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white font-mono text-sm tracking-wider font-bold rounded-xl shadow-lg shadow-blue-600/20 active:scale-95 transition-all">
                 ENTER EXPEDITION GRID
@@ -47,8 +47,8 @@
                 <p class="text-[10px] font-mono text-gray-500 uppercase">Origin Station: Irvine, CA</p>
             </div>
             <div class="flex items-center space-x-3 bg-gray-900 px-3 py-1.5 rounded-lg border border-gray-800">
-                <span class="text-[10px] font-mono text-gray-400">GUIDE BRIEFING:</span>
-                <audio id="intro-audio" src="media/audio/intro.mp3" controls class="h-6 max-w-[150px] sm:max-w-xs invert opacity-80"></audio>
+                <span class="text-xs font-mono text-gray-400">GUIDE BRIEFING:</span>
+                <audio id="intro-audio" src="media/audio/intro.mp3" controls class="h-8 max-w-[200px] sm:max-w-xs invert opacity-80"></audio>
             </div>
         </div>
     </header>
@@ -62,9 +62,7 @@
 
         <div id="media-modal" class="fixed inset-0 z-[2000] bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
             <div class="bg-gray-950 border border-gray-800 w-full max-w-2xl rounded-2xl p-5 sm:p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
-                
                 <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-500 hover:text-white font-mono text-sm p-2 bg-gray-900 rounded-lg border border-gray-800 z-50">✕ CLOSE</button>
-                
                 <div id="modal-content"></div>
             </div>
         </div>
@@ -140,12 +138,12 @@
         // Initialize Map Object
         const map = L.map('map', { center: [25, 10], zoom: 2, minZoom: 2 });
         
-        // Call street/terrain tile maps from OpenStreetMap database
+        // OpenStreetMap Tile Set Layer Deployment
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        // SVG Vector Graphic for the Backpacker Stickman
+        // SVG Vectors definitions
         const stickmanSvg = `
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="-15 -30 30 40" width="30" height="40" class="animated-vehicle">
                 <rect x="-10" y="-22" width="6" height="12" rx="2" fill="#ef4444" />
@@ -156,7 +154,6 @@
                 <line x1="0" y1="-10" x2="4" y2="0" stroke="#ffffff" stroke-width="2" />
             </svg>`;
 
-        // SVG Vector Graphic for the Jet Airplane
         const airplaneSvg = `
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36" fill="#10b981" class="animated-vehicle" style="transform: rotate(45deg);">
                 <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L14 19v-5.5L21 16z"/>
@@ -165,18 +162,18 @@
         const stickmanIcon = L.divIcon({ html: stickmanSvg, className: 'custom-stickman-marker', iconSize: [30, 40], iconAnchor: [15, 10] });
         const airplaneIcon = L.divIcon({ html: airplaneSvg, className: 'custom-airplane-marker', iconSize: [36, 36], iconAnchor: [18, 18] });
 
-        // Place constant home base station marker at Irvine
+        // Build permanent indicator marker at Irvine home station position
         L.marker(originCoords, {
             icon: L.divIcon({ html: '<div class="w-3 h-3 bg-blue-500 rounded-full border-2 border-white animate-pulse"></div>', className: '' })
         }).addTo(map);
 
-        // Main Traveler Actor Marker (Starts as stickman at home base)
+        // Core Traveler Actor Marker
         const travelerMarker = L.marker(originCoords, { icon: stickmanIcon, zIndexOffset: 1000 }).addTo(map);
         
         let currentFlightLine = null;
         let slideInterval = null;
 
-        // Loop to embed interactive node markers directly onto map canvas coordinates
+        // Loop linking target keys directly onto realistic geographical pins
         Object.keys(destinations).forEach(key => {
             const dest = destinations[key];
             const marker = L.marker(dest.coords, {
@@ -186,14 +183,108 @@
             marker.on('click', () => triggerExpedition(key));
         });
 
-        // Launch screen close sequence handler
+        // FIXED Entry Method Execution Loop
         function launchWebsite() {
             const overlay = document.getElementById('intro-overlay');
             const introAudio = document.getElementById('intro-audio');
+            
             overlay.classList.add('opacity-0');
-            setTimeout(() => overlay.remove(), 1000);
+            
+            // Critical hardware layout redraw execution hook to fix browser lockup bugs
+            setTimeout(() => {
+                overlay.remove();
+                map.invalidateSize(); 
+            }, 1000);
 
             if (introAudio) {
-                introAudio.play().catch(err => console.log("Autoplay check handled successfully.", err));
+                introAudio.play().catch(err => console.log("Autoplay stream initialization caught safely.", err));
             }
         }
+
+        // Multi-Vehicle Animation Sequence Handler
+        function triggerExpedition(key) {
+            closeModal();
+            const data = destinations[key];
+            
+            document.getElementById('distance-readout').innerText = data.distance;
+
+            if (currentFlightLine) map.removeLayer(currentFlightLine);
+
+            currentFlightLine = L.polyline([originCoords, data.coords], {
+                color: '#3b82f6', weight: 2, dashArray: '6, 8', opacity: 0.6
+            }).addTo(map);
+
+            map.fitBounds([originCoords, data.coords], { padding: [80, 80], maxZoom: 4 });
+
+            setTimeout(() => {
+                travelerMarker.setIcon(airplaneIcon);
+                
+                setTimeout(() => {
+                    travelerMarker.setLatLng(data.coords);
+                    
+                    setTimeout(() => {
+                        travelerMarker.setIcon(stickmanIcon);
+                        openMediaModal(data);
+                    }, 2500); 
+                }, 300);
+            }, 200);
+        }
+
+        // Pop-up Dashboard Constructor
+        function openMediaModal(data) {
+            const modal = document.getElementById('media-modal');
+            const content = document.getElementById('modal-content');
+            modal.classList.remove('hidden');
+            
+            let photoSlides = data.photos.map((img, i) => 
+                `<img src="${img}" id="slide-${i}" class="slide-img w-full h-64 sm:h-80 object-cover rounded-xl border border-gray-800 absolute top-0 left-0 transition-opacity duration-1000 ${i === 0 ? 'opacity-100' : 'opacity-0'}" alt="Slide ${i}">`
+            ).join('');
+
+            content.innerHTML = `
+                <div class="border-b border-gray-900 pb-3 mb-4 pr-16">
+                    <h3 class="text-2xl font-bold text-white tracking-tight">${data.title}</h3>
+                    <p class="text-xs font-mono text-emerald-400 mt-0.5">${data.distance} from HQ Station</p>
+                </div>
+                
+                <div class="relative w-full h-64 sm:h-80 mb-5 overflow-hidden rounded-xl bg-gray-900 shadow-xl">
+                    ${photoSlides}
+                </div>
+
+                <div class="mb-5 p-3.5 bg-gray-900 rounded-xl border border-blue-950/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-md">
+                    <div>
+                        <p class="text-[11px] font-mono text-blue-400 font-bold uppercase tracking-wider">🎙️ LINK DEPLOYED | COMMENTARY ACTIVE</p>
+                        <p class="text-[10px] text-gray-500 mt-0.5">Playing Pete's on-the-ground notes.</p>
+                    </div>
+                    <audio id="destination-audio" src="${data.audio}" controls autoplay class="h-8 w-full sm:max-w-xs invert opacity-90"></audio>
+                </div>
+
+                <p class="text-gray-300 leading-relaxed text-xs sm:text-sm bg-gray-900/50 p-4 rounded-xl border border-gray-900">${data.text}</p>
+            `;
+
+            let currentSlide = 0;
+            const totalSlides = data.photos.length;
+            if (totalSlides > 1) {
+                slideInterval = setInterval(() => {
+                    const activeImg = document.getElementById(`slide-${currentSlide}`);
+                    if (activeImg) activeImg.classList.replace('opacity-100', 'opacity-0');
+                    
+                    currentSlide = (currentSlide + 1) % totalSlides;
+                    
+                    const nextImg = document.getElementById(`slide-${currentSlide}`);
+                    if (nextImg) nextImg.classList.replace('opacity-0', 'opacity-100');
+                }, 3500);
+            }
+        }
+
+        // Pop-up Reset Operator Method
+        function closeModal() {
+            clearInterval(slideInterval);
+            document.getElementById('media-modal').classList.add('hidden');
+            document.getElementById('modal-content').innerHTML = '';
+            
+            travelerMarker.setLatLng(originCoords);
+            if (currentFlightLine) map.removeLayer(currentFlightLine);
+        }
+    </script>
+</body>
+</html>
